@@ -47,11 +47,49 @@ function outcome(hand1, hand2) {
             }
     }
 }
-const playerSelection = "rock";
-console.log(playerSelection);
 
-const computerSelection = getComputerChoice();
-console.log(computerSelection);
+function game() {
+
+    let pcWins=0;
+    let userWins = 0;
+    for(let i=0; i<5; i++)
+    {
+        let playerSelection = prompt("rock, paper, or scissors? ");
+        console.log(playerSelection);
+
+        const computerSelection = getComputerChoice();
+        console.log(computerSelection);
+
+        let match = outcome(playerSelection, computerSelection);
+        console.log(match);
+
+        if (match == 'win')
+        {
+            userWins++;
+        }
+        else if (match =='lose')
+        {
+            pcWins++;
+        }
+        else
+        {
+            continue;
+        }
 
 
-console.log(outcome(playerSelection, computerSelection));
+    }
+    if (userWins > pcWins)
+    {
+        console.log("you won the game!");
+    }
+    else if (userWins < pcWins)
+    {
+        console.log("loser!");
+    }
+    else
+    {
+        console.log("it's a tie!")
+    }
+}
+
+game();
