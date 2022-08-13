@@ -16,6 +16,21 @@ function getComputerChoice() {
     return hand;
 }
 
+function updateOutput(notification) {
+    const myOutput = document.getElementById("output");
+    myOutput.insertAdjacentHTML("beforeend", "</br>"+notification);
+}
+
+function updateScore(playerScore, pcScore) {
+    const myScore = document.getElementById("score");
+    myScore.innerHTML="Player: "+playerScore+"|| PC: "+pcScore;
+}
+
+function clearScore() {
+    const myDiv = document.getElementById("output");
+    myDiv.innerHTML="";
+}
+
 function outcome(hand1, hand2) {
     switch(hand1) {
         case 'rock':
@@ -48,48 +63,70 @@ function outcome(hand1, hand2) {
     }
 }
 
-function game() {
+// Starting Conditions
+let pcWins = 0;
+let userWins = 0;
 
-    let pcWins=0;
-    let userWins = 0;
-    for(let i=0; i<5; i++)
+function endgame(player) {
+    clearScore();
+    updateOutput("**********</br>"+player + " won 5 rounds, they won the game!</br>**********");
+    pcWins=0;
+    userWins=0;
+}
+
+function playGame(playerSelection) {
+
+    // Check playerselection
+    console.log(playerSelection);
+
+    // Get randomized computer input
+    const computerSelection = getComputerChoice();
+    console.log(computerSelection);
+
+    // Run match
+    let match = outcome(playerSelection, computerSelection);
+    console.log(match);
+
+    // Add to variables
+    if (match == 'win')
     {
-        let playerSelection = prompt("rock, paper, or scissors? ");
-        console.log(playerSelection);
-
-        const computerSelection = getComputerChoice();
-        console.log(computerSelection);
-
-        let match = outcome(playerSelection, computerSelection);
-        console.log(match);
-
-        if (match == 'win')
-        {
-            userWins++;
-        }
-        else if (match =='lose')
-        {
-            pcWins++;
-        }
-        else
-        {
-            continue;
-        }
-
-
+        userWins++;
+        updateOutput("Player: "+playerSelection+"; Computer: "+computerSelection+"; User won that round!");
+        updateScore(userWins,pcWins);
+        updateOutput("----------");
     }
-    if (userWins > pcWins)
+    else if (match =='lose')
     {
-        console.log("you won the game!");
+        pcWins++;
+        updateOutput("Player: "+playerSelection+"; Computer: "+computerSelection+"; Computer won that round!");
+        updateScore(userWins,pcWins);
+        updateOutput("----------");
     }
-    else if (userWins < pcWins)
-    {
-        console.log("loser!");
+    else {
+        updateOutput("Player: "+playerSelection+"; Computer: "+computerSelection+"; That round was a tie! No points given.");
+        updateOutput("----------");
     }
-    else
+    
+
+    // Check if match has 
+    console.log(userWins);
+    console.log(pcWins);
+
+    if (userWins == 5)
     {
-        console.log("it's a tie!")
+        endgame("user");
+    }// bing bong
+    else if (pcWins == 5)
+    {
+        endgame("computer");
     }
 }
 
-game();
+const btns = document.querySelectorAll("button");
+console.log(btns);
+btns.forEach(element => {
+       element.addEventListener('click', event => {
+        playerSelection = event.target.id;
+        playGame(playerSelection);
+       });
+    });
